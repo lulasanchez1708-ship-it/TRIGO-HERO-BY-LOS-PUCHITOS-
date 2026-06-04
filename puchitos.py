@@ -166,36 +166,42 @@ else:
 
     archivo = st.file_uploader("Sube tu Excel", type=["xlsx"])
 
+
 if archivo is not None:
-    df = pd.read_excel(archivo)
 
-    df = df.dropna(subset=["Nombre", "Puntaje"])
-    df["Puntaje"] = pd.to_numeric(df["Puntaje"], errors="coerce")
-    df = df.dropna(subset=["Puntaje"])
+    try:
+        df = pd.read_excel(archivo, engine="openpyxl")
 
-    fig, ax = plt.subplots()
-    ax.bar(df["Nombre"], df["Puntaje"])
+    except Exception as e:
+        st.error(f"Error al leer el Excel: {e}")
+        st.stop()
+df = df.dropna(subset=["Nombre", "Puntaje"])
+df["Puntaje"] = pd.to_numeric(df["Puntaje"], errors="coerce")
+df = df.dropna(subset=["Puntaje"])
 
-    st.pyplot(fig)
+fig, ax = plt.subplots()
+ax.bar(df["Nombre"], df["Puntaje"])
 
-    nuevo = pd.DataFrame({
+st.pyplot(fig)
+
+nuevo = pd.DataFrame({
         "Nombre":[st.session_state.nombre],
         "Puntaje":[st.session_state.puntaje]
     })
 
-    df = pd.concat([df, nuevo], ignore_index=True)
+df = pd.concat([df, nuevo], ignore_index=True)
 
-    df.to_csv(archivo, index=False)
+df.to_csv(archivo, index=False)
 
-    st.success("Resultado guardado")
+st.success("Resultado guardado")
 
-    st.subheader("🏆 Historial")
+st.subheader("🏆 Historial")
 
-    st.dataframe(df)
+st.dataframe(df)
 
     # gráfico
 
-    fig, ax = plt.subplots()
+fig, ax = plt.subplots()
 
 ax.bar(
     df["Nombre"],
