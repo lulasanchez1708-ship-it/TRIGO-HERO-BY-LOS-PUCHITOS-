@@ -167,6 +167,8 @@ else:
     archivo = st.file_uploader("Sube tu Excel", type=["xlsx"])
 
 
+archivo = st.file_uploader("Sube tu Excel", type=["xlsx"])
+
 if archivo is not None:
 
     try:
@@ -175,9 +177,16 @@ if archivo is not None:
     except Exception as e:
         st.error(f"Error al leer el Excel: {e}")
         st.stop()
-df = df.dropna(subset=["Nombre", "Puntaje"])
-df["Puntaje"] = pd.to_numeric(df["Puntaje"], errors="coerce")
-df = df.dropna(subset=["Puntaje"])
+
+    # 👇 A PARTIR DE AQUÍ df YA EXISTE
+    df = df.dropna(subset=["Nombre", "Puntaje"])
+    df["Puntaje"] = pd.to_numeric(df["Puntaje"], errors="coerce")
+    df = df.dropna(subset=["Puntaje"])
+
+    fig, ax = plt.subplots()
+    ax.bar(df["Nombre"], df["Puntaje"])
+
+    st.pyplot(fig)
 
 fig, ax = plt.subplots()
 ax.bar(df["Nombre"], df["Puntaje"])
