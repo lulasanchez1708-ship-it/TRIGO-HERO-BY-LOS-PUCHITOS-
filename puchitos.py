@@ -164,7 +164,19 @@ else:
         f"Puntaje final: {st.session_state.puntaje}"
     )
 
-    df = pd.read_csv(archivo)
+    archivo = st.file_uploader("Sube tu Excel", type=["xlsx"])
+
+if archivo is not None:
+    df = pd.read_excel(archivo)
+
+    df = df.dropna(subset=["Nombre", "Puntaje"])
+    df["Puntaje"] = pd.to_numeric(df["Puntaje"], errors="coerce")
+    df = df.dropna(subset=["Puntaje"])
+
+    fig, ax = plt.subplots()
+    ax.bar(df["Nombre"], df["Puntaje"])
+
+    st.pyplot(fig)
 
     nuevo = pd.DataFrame({
         "Nombre":[st.session_state.nombre],
@@ -185,18 +197,18 @@ else:
 
     fig, ax = plt.subplots()
 
-    ax.bar(
-        df["Nombre"],
-        df["Puntaje"]
-    )
+ax.bar(
+    df["Nombre"],
+    df["Puntaje"]
+)
 
-    ax.set_title(
+ax.set_title(
         "Puntajes de jugadores"
     )
 
-    st.pyplot(fig)
+st.pyplot(fig)
 
-    if st.button("Jugar otra vez"):
+if st.button("Jugar otra vez"):
 
         st.session_state.inicio = False
         st.session_state.puntaje = 0
@@ -206,4 +218,3 @@ else:
         )
 
         st.rerun()
-        
