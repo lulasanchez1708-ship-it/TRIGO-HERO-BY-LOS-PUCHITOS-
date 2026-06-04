@@ -173,23 +173,20 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
-# 📌 cargar archivo por defecto
+# 📌 cargar base de datos automática
 df = pd.read_excel("datos.xlsx", engine="openpyxl")
 
-# opcional: permitir reemplazo por usuario
-archivo = st.file_uploader("Sube un Excel (opcional)", type=["xlsx"])
-
-if archivo is not None:
-    df = pd.read_excel(archivo, engine="openpyxl")
-
-# 🔧 limpieza SIEMPRE después de tener df
+# 🧼 limpieza
 df = df.dropna(subset=["Nombre", "Puntaje"])
 df["Puntaje"] = pd.to_numeric(df["Puntaje"], errors="coerce")
 df = df.dropna(subset=["Puntaje"])
 
-# 📊 gráfico
+st.title("📊 TRIGO HERO - Resultados")
+
+# 📊 gráfico automático
 fig, ax = plt.subplots()
 ax.bar(df["Nombre"], df["Puntaje"])
+
 st.pyplot(fig)
 
     # 👇 A PARTIR DE AQUÍ df YA EXISTE
