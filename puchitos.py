@@ -173,22 +173,17 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
-# 📌 cargar base de datos automática
-df = pd.read_excel("datos.xlsx", engine="openpyxl")
-
-# 🧼 limpieza
+df = pd.read_excel("base_datos.xlsx", engine="openpyxl")
 df = df.dropna(subset=["Nombre", "Puntaje"])
 df["Puntaje"] = pd.to_numeric(df["Puntaje"], errors="coerce")
 df = df.dropna(subset=["Puntaje"])
 
-st.title("📊 TRIGO HERO - Resultados")
+st.title("📊 TRIGO HERO")
 
-# 📊 gráfico automático
 fig, ax = plt.subplots()
 ax.bar(df["Nombre"], df["Puntaje"])
 
 st.pyplot(fig)
-
     # 👇 A PARTIR DE AQUÍ df YA EXISTE
 df = df.dropna(subset=["Nombre", "Puntaje"])
 df["Puntaje"] = pd.to_numeric(df["Puntaje"], errors="coerce")
