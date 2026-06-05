@@ -3,6 +3,11 @@ import pandas as pd
 import random
 import os
 import matplotlib.pyplot as plt
+import os
+import streamlit as st
+
+st.write("ARCHIVOS QUE VE STREAMLIT:")
+st.write(os.listdir())
 
 # =====================================
 # CONFIGURACIÓN
@@ -174,20 +179,12 @@ import streamlit as st
 import matplotlib.pyplot as plt
 
 df = pd.read_excel("base_datos.xlsx", engine="openpyxl")
+
 df = df.dropna(subset=["Nombre", "Puntaje"])
 df["Puntaje"] = pd.to_numeric(df["Puntaje"], errors="coerce")
 df = df.dropna(subset=["Puntaje"])
 
 st.title("📊 TRIGO HERO")
-
-fig, ax = plt.subplots()
-ax.bar(df["Nombre"], df["Puntaje"])
-
-st.pyplot(fig)
-    # 👇 A PARTIR DE AQUÍ df YA EXISTE
-df = df.dropna(subset=["Nombre", "Puntaje"])
-df["Puntaje"] = pd.to_numeric(df["Puntaje"], errors="coerce")
-df = df.dropna(subset=["Puntaje"])
 
 fig, ax = plt.subplots()
 ax.bar(df["Nombre"], df["Puntaje"])
