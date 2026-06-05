@@ -177,53 +177,27 @@ archivo = st.file_uploader("Sube tu Excel", type=["xlsx"])
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
+import os
 
-df = pd.read_excel("base_datos.xlsx", engine="openpyxl")
-
-df = df.dropna(subset=["Nombre", "Puntaje"])
-df["Puntaje"] = pd.to_numeric(df["Puntaje"], errors="coerce")
-df = df.dropna(subset=["Puntaje"])
-
-st.title("📊 TRIGO HERO")
-
-fig, ax = plt.subplots()
-ax.bar(df["Nombre"], df["Puntaje"])
-
-st.pyplot(fig)
-
-fig, ax = plt.subplots()
-ax.bar(df["Nombre"], df["Puntaje"])
-
-st.pyplot(fig)
-
-nuevo = pd.DataFrame({
-        "Nombre":[st.session_state.nombre],
-        "Puntaje":[st.session_state.puntaje]
+# 📌 crear base si no existe
+if not os.path.exists("base_datos.csv"):
+    df_init = pd.DataFrame({
+        "Nombre": ["Ana", "Luis", "Carlos"],
+        "Puntaje": [10, 8, 9]
     })
+    df_init.to_csv("base_datos.csv", index=False)
 
-df = pd.concat([df, nuevo], ignore_index=True)
-
-df.to_csv(archivo, index=False)
-
-st.success("Resultado guardado")
-
-st.subheader("🏆 Historial")
-
-st.dataframe(df)
+# 📌 cargar SIEMPRE (fuera de cualquier if)
+df = pd.read_csv("base_datos.csv")
 
     # gráfico
 
+df = df.dropna(subset=["Nombre", "Puntaje"])
+
 fig, ax = plt.subplots()
+ax.bar(df["Nombre"], df["Puntaje"])
 
-ax.bar(
-    df["Nombre"],
-    df["Puntaje"]
-)
-
-ax.set_title(
-        "Puntajes de jugadores"
-    )
-
+st.title("📊 TRIGO HERO")
 st.pyplot(fig)
 
 if st.button("Jugar otra vez"):
