@@ -4,22 +4,18 @@ import random
 import os
 import matplotlib.pyplot as plt
 
-# =====================================
-# CONFIGURACIÓN
-# =====================================
+# =========================
+# CONFIG
+# =========================
 st.set_page_config(
     page_title="TRIGO HERO by PUCHITOS",
     page_icon="🎮",
     layout="centered"
 )
 
-# DEBUG (puedes quitarlo luego)
-st.write("ARCHIVOS QUE VE STREAMLIT:")
-st.write(os.listdir())
-
-# =====================================
-# PREGUNTAS
-# =====================================
+# =========================
+# PREGUNTAS (60)
+# =========================
 preguntas = [
     {"pregunta":"¿Cuántos grados tiene un ángulo recto?","respuesta":"90"},
     {"pregunta":"¿Cuántos grados tiene un ángulo llano?","respuesta":"180"},
@@ -30,9 +26,9 @@ preguntas = [
     {"pregunta":"¿Seno de 90°?","respuesta":"1"},
     {"pregunta":"¿Coseno de 90°?","respuesta":"0"},
     {"pregunta":"¿Tangente de 0°?","respuesta":"0"},
-    {"pregunta":"¿Pi radianes en grados?","respuesta":"180"},
-    {"pregunta":"¿Pi/2 en grados?","respuesta":"90"},
-    {"pregunta":"¿2π radianes en grados?","respuesta":"360"},
+    {"pregunta":"¿π en grados?","respuesta":"180"},
+    {"pregunta":"¿π/2 en grados?","respuesta":"90"},
+    {"pregunta":"¿2π en grados?","respuesta":"360"},
     {"pregunta":"¿Hipotenusa de 3 y 4?","respuesta":"5"},
     {"pregunta":"¿Hipotenusa de 5 y 12?","respuesta":"13"},
     {"pregunta":"¿Hipotenusa de 8 y 15?","respuesta":"17"},
@@ -46,55 +42,55 @@ preguntas = [
     {"pregunta":"¿13²?","respuesta":"169"},
     {"pregunta":"¿15²?","respuesta":"225"},
     {"pregunta":"¿20²?","respuesta":"400"},
-    {"pregunta":"¿Cateto opuesto / hipotenusa?","respuesta":"seno"},
-    {"pregunta":"¿Cateto adyacente / hipotenusa?","respuesta":"coseno"},
-    {"pregunta":"¿Cateto opuesto / adyacente?","respuesta":"tangente"},
-    {"pregunta":"¿Un triángulo tiene cuántos grados?","respuesta":"180"},
-    {"pregunta":"¿Un minuto tiene cuántos segundos?","respuesta":"60"},
-    {"pregunta":"¿Una hora tiene cuántos minutos?","respuesta":"60"},
     {"pregunta":"¿sin(0°)?","respuesta":"0"},
     {"pregunta":"¿cos(180°)?","respuesta":"-1"},
     {"pregunta":"¿sin(180°)?","respuesta":"0"},
     {"pregunta":"¿cos(360°)?","respuesta":"1"},
-    {"pregunta":"¿tan(90°)?","respuesta":"undefined"},
     {"pregunta":"¿sin²x + cos²x?","respuesta":"1"},
     {"pregunta":"¿cos(-x)?","respuesta":"cos(x)"},
     {"pregunta":"¿sin(-x)?","respuesta":"-sin(x)"},
     {"pregunta":"¿tan(-x)?","respuesta":"-tan(x)"},
-    {"pregunta":"¿ángulo de 45° en radianes aprox?","respuesta":"0.785"},
     {"pregunta":"¿π ≈ ?","respuesta":"3.14"},
-    {"pregunta":"¿360° en radianes?","respuesta":"2π"},
     {"pregunta":"¿180° en radianes?","respuesta":"π"},
+    {"pregunta":"¿360° en radianes?","respuesta":"2π"},
     {"pregunta":"¿90° en radianes?","respuesta":"π/2"},
     {"pregunta":"¿60° seno?","respuesta":"√3/2"},
     {"pregunta":"¿60° coseno?","respuesta":"0.5"},
-    {"pregunta":"¿30° coseno?","respuesta":"√3/2"},
     {"pregunta":"¿30° seno?","respuesta":"0.5"},
+    {"pregunta":"¿30° coseno?","respuesta":"√3/2"},
     {"pregunta":"¿45° seno?","respuesta":"√2/2"},
     {"pregunta":"¿45° coseno?","respuesta":"√2/2"},
     {"pregunta":"¿tan(60°)?","respuesta":"√3"},
     {"pregunta":"¿tan(30°)?","respuesta":"√3/3"},
-    {"pregunta":"¿identidad pitagórica?","respuesta":"1"}
+    {"pregunta":"¿identidad pitagórica?","respuesta":"1"},
+    {"pregunta":"¿cateto opuesto/hipotenusa?","respuesta":"seno"},
+    {"pregunta":"¿cateto adyacente/hipotenusa?","respuesta":"coseno"},
+    {"pregunta":"¿cateto opuesto/adyacente?","respuesta":"tangente"},
+    {"pregunta":"¿triángulo suma de ángulos?","respuesta":"180"},
+    {"pregunta":"¿un minuto tiene segundos?","respuesta":"60"},
+    {"pregunta":"¿una hora tiene minutos?","respuesta":"60"},
+    {"pregunta":"¿tan(90°)?","respuesta":"indefinido"},
+    {"pregunta":"¿cos(0°)?","respuesta":"1"},
+    {"pregunta":"¿sin(90°)?","respuesta":"1"},
+    {"pregunta":"¿ángulo completo en radianes?","respuesta":"2π"}
 ]
 
-# =====================================
+# =========================
 # BASE DE DATOS
-# =====================================
+# =========================
 archivo = "resultados.csv"
 
 if not os.path.exists(archivo):
     pd.DataFrame(columns=["Nombre", "Puntaje"]).to_csv(archivo, index=False)
 
-df_global = pd.read_csv(archivo)
-
-# =====================================
+# =========================
 # SESSION STATE
-# =====================================
-if "nombre" not in st.session_state:
-    st.session_state.nombre = ""
-
+# =========================
 if "inicio" not in st.session_state:
     st.session_state.inicio = False
+
+if "nombre" not in st.session_state:
+    st.session_state.nombre = ""
 
 if "puntaje" not in st.session_state:
     st.session_state.puntaje = 0
@@ -102,16 +98,15 @@ if "puntaje" not in st.session_state:
 if "vidas" not in st.session_state:
     st.session_state.vidas = 3
 
-if "orden_preguntas" not in st.session_state:
-    st.session_state.orden_preguntas = random.sample(preguntas, len(preguntas))
-
 if "indice" not in st.session_state:
     st.session_state.indice = 0
-    if "pregunta" not in st.session_state:
-     st.session_state.pregunta = random.choice(preguntas)
-# =====================================
+
+if "orden" not in st.session_state:
+    st.session_state.orden = random.sample(preguntas, len(preguntas))
+
+# =========================
 # PORTADA
-# =====================================
+# =========================
 if not st.session_state.inicio:
 
     st.title("🎮 TRIGO HERO by PUCHITOS")
@@ -124,10 +119,10 @@ if not st.session_state.inicio:
             st.session_state.inicio = True
             st.rerun()
 
-# =====================================
+# =========================
 # JUEGO
-# =====================================
-elif st.session_state.vidas > 0:
+# =========================
+elif st.session_state.vidas > 0 and st.session_state.indice < len(preguntas):
 
     st.title("🎮 TRIGO HERO")
 
@@ -137,10 +132,11 @@ elif st.session_state.vidas > 0:
     col1.metric("⭐ Puntos", st.session_state.puntaje)
     col2.metric("❤️ Vidas", st.session_state.vidas)
 
-    p = st.session_state.orden_preguntas[st.session_state.indice]
+    p = st.session_state.orden[st.session_state.indice]
+
     st.subheader(p["pregunta"])
 
-    respuesta = st.text_input("Tu respuesta", key="input")
+    respuesta = st.text_input("Tu respuesta", key=st.session_state.indice)
 
     if st.button("Responder"):
 
@@ -152,22 +148,17 @@ elif st.session_state.vidas > 0:
             st.session_state.vidas -= 1
 
         st.session_state.indice += 1
+        st.rerun()
 
-if st.session_state.indice >= len(preguntas):
-    st.session_state.vidas = 0  # termina juego
-
-st.rerun()
-
-# =====================================
+# =========================
 # GAME OVER
-# =====================================
+# =========================
 else:
 
     st.title("💀 Juego Terminado")
 
     st.write(f"Puntaje final: {st.session_state.puntaje}")
 
-    # guardar resultado
     nuevo = pd.DataFrame({
         "Nombre": [st.session_state.nombre],
         "Puntaje": [st.session_state.puntaje]
@@ -177,25 +168,19 @@ else:
 
     st.success("Resultado guardado")
 
-    # =================================
-    # HISTORIAL + GRÁFICA
-    # =================================
-    df_global = pd.read_csv(archivo)
+    df = pd.read_csv(archivo)
 
     st.subheader("🏆 Historial")
-
-    st.dataframe(df_global)
+    st.dataframe(df)
 
     fig, ax = plt.subplots()
-    ax.bar(df_global["Nombre"], df_global["Puntaje"])
-
-    st.subheader("📊 Ranking")
+    ax.bar(df["Nombre"], df["Puntaje"])
     st.pyplot(fig)
 
-    # reinicio
     if st.button("Jugar otra vez"):
         st.session_state.inicio = False
         st.session_state.puntaje = 0
         st.session_state.vidas = 3
-        st.session_state.pregunta = random.choice(preguntas)
+        st.session_state.indice = 0
+        st.session_state.orden = random.sample(preguntas, len(preguntas))
         st.rerun()
